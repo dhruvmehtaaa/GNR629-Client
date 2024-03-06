@@ -148,7 +148,9 @@ export class WmsformComponent implements OnInit {
       // this.spinner.show();
       this.interoperabilityService.getData(urlLoc).subscribe(data => {
         const parser = new DOMParser();
-        const xml = parser.parseFromString(data, "text/xml");
+      const xml = parser.parseFromString(data, "text/xml");
+      const xmlString = new XMLSerializer().serializeToString(xml);
+      this.interoperabilityService.setXmlResponse(xmlString);
         this.obj = this.ngxXml2jsonService.xmlToJson(xml);
         // this.spinner.hide();
         this.getCapabilities = "hit";
@@ -168,6 +170,7 @@ export class WmsformComponent implements OnInit {
         }
       });
     }
+    
   }
 
   SubmitWMSForm() {

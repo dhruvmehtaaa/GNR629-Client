@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
-import { Observable } from "rxjs";
+import { Observable, BehaviorSubject } from "rxjs";
 
 @Injectable({
   providedIn: "root"
@@ -8,6 +8,15 @@ import { Observable } from "rxjs";
 export class InteroperabilityService {
   image;
   constructor(private http: HttpClient) {}
+
+  private xmlResponseSubject: BehaviorSubject<string> = new BehaviorSubject<string>(null);
+  public xmlResponse$: Observable<string> = this.xmlResponseSubject.asObservable();
+
+  setXmlResponse(xmlResponse: string) {
+    //console.log(xmlResponse); // Log the XML response to the console
+    this.xmlResponseSubject.next(xmlResponse);
+  }
+  
 
   getData(url): Observable<any> {
     return this.http.get(url, { responseType: "text" });
