@@ -12,6 +12,15 @@ import { NgxSpinnerService } from "ngx-spinner";
 })
 export class WmsformComponent implements OnInit {
   // obj = null;
+  onServerSelectionChange() {
+    const selectedServer = this.form.get('serverSelection').value;
+    if (selectedServer === 'localhost') {
+      this.form.get('URL').setValue('http://localhost:8080/geoserver/wms?service=wms&version=1.1.1&request=GetCapabilities');
+    } else if (selectedServer === 'bhuvan') {
+      this.form.get('URL').setValue('https://bhuvan-vec2.nrsc.gov.in/bhuvan/wms?service=wms&version=1.1.1&request=GetCapabilities');
+    }
+  }
+  
   getCapabilities = "notHit";
   imageToShow;
   getLayers = false;
@@ -37,7 +46,7 @@ export class WmsformComponent implements OnInit {
   serverSelection = new FormControl('localhost'); // Default to localhost
 
   // Add Bhuvan server URL
-  bhuvanServerUrl = 'https://bhuvan-vec2.nrsc.gov.in/bhuvan/wms?service=wms&version=1.1.1&request=GetCapabilities';
+  bhuvanServerUrl = 'https://bhuvan-vec2.nrsc.gov.in/bhuvan/wms';
   form = new FormGroup({
     serverSelection: new FormControl('localhost'),
     URL: new FormControl(
@@ -135,6 +144,7 @@ export class WmsformComponent implements OnInit {
   onSubmit() {
     const selectedServer = this.serverSelection.value;
     let urlLoc: string;
+    console.log(selectedServer);
 
     if (selectedServer === 'localhost') {
       urlLoc = this.form.controls["URL"].value;
@@ -176,16 +186,16 @@ export class WmsformComponent implements OnInit {
   SubmitWMSForm() {
     alert("done!!");
     const selectedServer = this.serverSelection.value;
-    let geoserverUrl: string;
-
-    if (selectedServer === 'localhost') {
-      geoserverUrl = 'http://localhost:8080/geoserver/topp/wms';
-    } else if (selectedServer === 'bhuvan') {
-      // Bhuvan server URL
-      geoserverUrl = 'https://bhuvan-vec2.nrsc.gov.in/bhuvan/wms';
-    }
     
-    // Extract form values
+    let serverUrl: string;
+    serverUrl = this.form.get('URL').value;
+    if(serverUrl==='https://bhuvan-vec2.nrsc.gov.in/bhuvan/wms?service=wms&version=1.1.1&request=GetCapabilities'){
+      serverUrl=this.bhuvanServerUrl;
+    }else{
+      serverUrl='http://localhost:8080/geoserver/wms';
+    }
+    // console.log(serverUrl);
+    
     const version = this.form.controls["Version"].value;
     const request_type= this.form.controls["WMSRequest"].value;
     const layers = this.form.controls["Layer"].value;
@@ -197,7 +207,7 @@ export class WmsformComponent implements OnInit {
   
   //console.log(bbox);
     // Construct the URL with form values
-    const Requrl = `${geoserverUrl}?service=WMS&version=${version}&request=${request_type}&layers=${layers}&bbox=${bbox}&width=${width}&height=${height}&srs=EPSG%3A4326&format=image%2Fpng`;
+    const Requrl = `${serverUrl}?service=WMS&version=${version}&request=${request_type}&layers=${layers}&bbox=${bbox}&width=${width}&height=${height}&srs=EPSG%3A4326&format=image%2Fpng`;
     console.log(Requrl);            
     // Fetch the image from the server
     this.interoperabilityService.getImageFromServer(Requrl).subscribe(
