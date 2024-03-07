@@ -20,6 +20,9 @@ export class WmsformComponent implements OnInit {
       this.form.get('URL').setValue('https://bhuvan-vec2.nrsc.gov.in/bhuvan/wms?service=wms&version=1.1.1&request=GetCapabilities');
     }
   }
+  sendString(url: string) {
+    this.interoperabilityService.sendString(url);
+  }
   
   getCapabilities = "notHit";
   imageToShow;
@@ -207,8 +210,9 @@ export class WmsformComponent implements OnInit {
   
   //console.log(bbox);
     // Construct the URL with form values
-    const Requrl = `${serverUrl}?service=WMS&version=${version}&request=${request_type}&layers=${layers}&bbox=${bbox}&width=${width}&height=${height}&srs=EPSG%3A4326&format=image%2Fpng`;
-    console.log(Requrl);            
+    const Requrl = `${serverUrl}?service=WMS&version=${version}&request=${request_type}&layers=${layers}&bbox=${bbox}&width=${width}&height=${height}&srs=EPSG%3A4326&format=image/png`;
+    console.log(Requrl);
+    this.sendString(Requrl);        
     // Fetch the image from the server
     this.interoperabilityService.getImageFromServer(Requrl).subscribe(
       (imageBlob: Blob) => {

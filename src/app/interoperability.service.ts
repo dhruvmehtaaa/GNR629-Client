@@ -16,6 +16,15 @@ export class InteroperabilityService {
     //console.log(xmlResponse); // Log the XML response to the console
     this.xmlResponseSubject.next(xmlResponse);
   }
+
+  private sentStringSubject: BehaviorSubject<string> = new BehaviorSubject<string>(null);
+  public sentString$: Observable<string> = this.sentStringSubject.asObservable();
+
+  sendString(data: string): Observable<any> {
+    // Logic for sending the string, as you've defined
+    this.sentStringSubject.next(data); // Update the BehaviorSubject with the sent string
+    return this.http.post('your-url', { stringData: data });
+  }
   
 
   getData(url): Observable<any> {
