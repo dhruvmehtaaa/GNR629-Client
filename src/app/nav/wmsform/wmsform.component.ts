@@ -169,9 +169,9 @@ export class WmsformComponent implements OnInit {
           this.layers = this.obj[
             "WMT_MS_Capabilities"
           ][1].Capability.Layer.Layer;
-          this.wmsRequests = Object.keys(
-            this.obj["WMT_MS_Capabilities"][1].Capability.Request
-          );
+          this.wmsRequests = Object.keys(this.obj["WMT_MS_Capabilities"][1].Capability.Request).filter(request => {
+            return request==="GetCapabilities" || request === "GetMap" || request === "GetFeatureInfo";
+          });
           this.versions = this.obj["WMT_MS_Capabilities"][1][
             "@attributes"
           ].version;
