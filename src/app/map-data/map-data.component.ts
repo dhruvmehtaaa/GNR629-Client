@@ -19,6 +19,7 @@ export class MapDataComponent implements OnInit, AfterViewInit, OnDestroy {
   private destroy$: Subject<void> = new Subject<void>();
   receivedStrings: string[] = []; // Array to store received strings
   basemapLayer: TileLayer; // Reference to the basemap layer
+  wmsLayers: TileLayer[] = []; // Array to store WMS layers
 
   constructor(
     private interoperabilityService: InteroperabilityService,
@@ -51,13 +52,6 @@ export class MapDataComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private loadWmsLayer(url: string, layerName: string) {
-    // Clear existing layers except the basemap layer
-    this.map.getLayers().forEach(layer => {
-      if (!(layer instanceof TileLayer) || layer !== this.basemapLayer) {
-        this.map.removeLayer(layer);
-      }
-    });
-
     // Add WMS layer
     const wmsLayer = new TileLayer({
       source: new TileWMS({
@@ -69,7 +63,9 @@ export class MapDataComponent implements OnInit, AfterViewInit, OnDestroy {
       })
     });
 
-    this.map.addLayer(wmsLayer);
+    this.wmsLayers.push(wmsLayer); // Add the layer to the array
+
+    this.map.addLayer(wmsLayer); // Add the layer to the map
   }
 
   private extractLayerName(url: string): string | null {
@@ -81,7 +77,7 @@ export class MapDataComponent implements OnInit, AfterViewInit, OnDestroy {
     this.map = new Map({
       target: "map",
       view: new View({
-        center: [813079.7791264898, 5929220.284081122],
+        center: [8392126, 2168563],
         zoom: 7
       })
     });
