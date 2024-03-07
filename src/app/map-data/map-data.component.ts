@@ -1,22 +1,34 @@
-import { Component, OnInit, AfterViewInit } from "@angular/core";
-import { defaults as defaultControls } from "ol/control";
-
+import { Component, OnInit, AfterViewInit, OnDestroy } from "@angular/core";
 import Map from "ol/Map";
 import View from "ol/View";
 import TileLayer from "ol/layer/Tile";
 import XYZ from "ol/source/XYZ";
-import ZoomToExtent from "ol/control/ZoomToExtent";
-import { InteroperabilityService } from "../interoperability.service";
+import { fromEvent, Subject } from "rxjs";
+import { map, takeUntil, switchMap } from "rxjs/operators";
 
 @Component({
   selector: "app-map-data",
   templateUrl: "./map-data.component.html",
   styleUrls: ["./map-data.component.css"]
 })
-export class MapDataComponent implements OnInit, AfterViewInit {
+export class MapDataComponent implements OnInit, AfterViewInit, OnDestroy {
   map: Map;
-  imageToShow;
+  private destroy$: Subject<void> = new Subject<void>();
+
   ngAfterViewInit() {
+    this.initMap();
+  }
+
+  constructor() {}
+
+  ngOnInit() {}
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  initMap() {
     this.map = new Map({
       target: "map",
       layers: [
@@ -29,49 +41,33 @@ export class MapDataComponent implements OnInit, AfterViewInit {
       view: new View({
         center: [813079.7791264898, 5929220.284081122],
         zoom: 7
-      }),
-      controls: defaultControls().extend([
-        new ZoomToExtent({
-          extent: [
-            813079.7791264898,
-            5929220.284081122,
-            848966.9639063801,
-            5936863.986909639
-          ]
-        })
-      ])
+      })
     });
-    this.map.setTarget("map");
+
+    const mapElement = document.getElementById("map");
+
+    // Handle mouse down event
+    fromEvent(mapElement, "mousedown")
+      .pipe(
+        switchMap(() =>
+          fromEvent(mapElement, "mousemove")
+            .pipe(
+              map((event: MouseEvent) => ({
+                deltaX: event.movementX,
+                deltaY: event.movementY
+              })),
+              takeUntil(fromEvent(mapElement, "mouseup")),
+            )
+        ),
+        takeUntil(this.destroy$)
+      )
+      .subscribe(({ deltaX, deltaY }) => {
+        const view = this.map.getView();
+        const viewCenter = view.getCenter();
+        view.setCenter([
+          viewCenter[0] - deltaX * view.getResolution(),
+          viewCenter[1] + deltaY * view.getResolution()
+        ]);
+      });
   }
-  constructor(private interoperabilityService: InteroperabilityService) {}
-
-  ngOnInit() {
-    // this.getImageFromService();
-  }
-
-  // getImageFromService() {
-  //   const yourImageUrl = this.interoperabilityService.getImage();
-  //   this.interoperabilityService.getImageFromServer(yourImageUrl).subscribe(
-  //     data => {
-  //       this.createImageFromBlob(data);
-  //     },
-  //     error => {
-  //       console.log(error);
-  //     }
-  //   );
-  // }
-
-  // createImageFromBlob(image: Blob) {
-  //   let reader = new FileReader();
-  //   reader.addEventListener(
-  //     "load",
-  //     () => {
-  //       this.imageToShow = reader.result;
-  //     },
-  //     false
-  //   );
-  //   if (image) {
-  //     reader.readAsDataURL(image);
-  //   }
-  // }
 }
