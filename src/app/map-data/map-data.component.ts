@@ -3,11 +3,13 @@ import Map from "ol/Map";
 import View from "ol/View";
 import TileLayer from "ol/layer/Tile";
 import XYZ from "ol/source/XYZ";
-import TileWMS from "ol/source/TileWMS";
 import { fromEvent, Subject } from "rxjs";
 import { takeUntil, switchMap } from "rxjs/operators";
 import { InteroperabilityService } from "../interoperability.service";
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { HttpClient } from '@angular/common/http';
+import TileWMS from 'ol/source/TileWMS';
+import { transform } from 'ol/proj';
+import Overlay from 'ol/Overlay';
 
 @Component({
   selector: "app-map-data",
@@ -20,10 +22,12 @@ export class MapDataComponent implements OnInit, AfterViewInit, OnDestroy {
   receivedStrings: string[] = []; // Array to store received strings
   basemapLayer: TileLayer; // Reference to the basemap layer
   wmsLayers: TileLayer[] = []; // Array to store WMS layers
+  features: any[] = []; // Array to store fetched features
+  popup: Overlay; // Popup overlay
 
   constructor(
     private interoperabilityService: InteroperabilityService,
-    private sanitizer: DomSanitizer
+    private http: HttpClient
   ) {}
 
   ngAfterViewInit() {
@@ -57,14 +61,14 @@ export class MapDataComponent implements OnInit, AfterViewInit, OnDestroy {
       source: new TileWMS({
         url: url,
         params: {
-          'LAYERS': layerName
+          'LAYERS': layerName,
+          'TILED': true // Tiled WMS for performance
         },
         serverType: 'geoserver'
       })
     });
 
     this.wmsLayers.push(wmsLayer); // Add the layer to the array
-
     this.map.addLayer(wmsLayer); // Add the layer to the map
   }
 
@@ -77,8 +81,8 @@ export class MapDataComponent implements OnInit, AfterViewInit, OnDestroy {
     this.map = new Map({
       target: "map",
       view: new View({
-        center: [8392126, 2168563],
-        zoom: 7
+        center: [0, 0],
+        zoom: 2
       })
     });
 
@@ -91,6 +95,26 @@ export class MapDataComponent implements OnInit, AfterViewInit, OnDestroy {
     this.map.addLayer(this.basemapLayer);
 
     const mapElement = document.getElementById("map");
+
+    // Create popup overlay
+    this.popup = new Overlay({
+      element: document.getElementById('popup'),
+      autoPan: true,
+      autoPanAnimation: {
+        duration: 250
+      }
+    });
+    this.map.addOverlay(this.popup);
+
+    // Handle click event on the map
+    fromEvent(mapElement, "click")
+      .pipe(
+        takeUntil(this.destroy$)
+      )
+      .subscribe((event: MouseEvent) => {
+        const coordinate = this.map.getEventCoordinate(event);
+        this.getFeatureInfo(coordinate);
+      });
 
     // Handle mouse down event
     fromEvent(mapElement, "mousedown")
@@ -112,4 +136,55 @@ export class MapDataComponent implements OnInit, AfterViewInit, OnDestroy {
         ]);
       });
   }
+
+  private getFeatureInfo(coordinate: [number, number]) {
+    const viewResolution = this.map.getView().getResolution();
+    const projection = this.map.getView().getProjection().getCode();
+    const url = this.wmsLayers[0].getSource().getFeatureInfoUrl(
+      coordinate,
+      viewResolution,
+      projection,
+      {
+        'INFO_FORMAT': 'application/json', // Request feature info in JSON format
+        'FEATURE_COUNT': 1 // Limit the number of features returned
+      }
+    );
+  
+    if (url) {
+      // Send HTTP GET request to the WMS server
+      this.http.get(url).subscribe((response: any) => {
+        // Handle the response here
+        console.log('Feature Info:', response);
+        const features = response.features;
+  
+        // Update popup content
+        const content = document.getElementById('popup-content');
+        if (content && features && features.length > 0) {
+          // Clear previous content
+          content.innerHTML = '';
+  
+          // Display the first property value of each feature
+          features.forEach(feature => {
+            for (const key in feature.properties) {
+              const p = document.createElement('p');
+              p.textContent = feature.properties[key];
+              content.appendChild(p);
+              break; // Only display the first property
+            }
+          });
+  
+          // Set popup position
+          this.popup.setPosition(coordinate);
+        } else {
+          // Clear popup content and hide popup if no features found
+          content.innerHTML = '';
+          this.popup.setPosition(undefined);
+        }
+      });
+    }
+  }
+  
+  
+  
+  
 }
