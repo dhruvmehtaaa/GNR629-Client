@@ -12,6 +12,7 @@ import { NgxSpinnerService } from "ngx-spinner";
 })
 export class WfsformComponent implements OnInit {
   // obj = null;
+  parsedXml: string;
   onServerSelectionChange() {
     const selectedServer = this.form.get('serverSelection').value;
     this.form.get('URL').setValue('http://localhost:8080/geoserver/wfs?service=wfs&version=1.1.1&request=GetCapabilities');
@@ -170,8 +171,8 @@ export class WfsformComponent implements OnInit {
     const format = this.form.controls["Format"].value;
     let Requrl: string;
   
-    if (request_type === 'DescribeFeatureType') {
-      Requrl = `http://localhost:8080/geoserver/wfs?service=WFS&version=1.1.0&request=DescribeFeatureType&typeName=${layers}`;
+    // if (request_type === 'DescribeFeatureType') {
+      Requrl = `http://localhost:8080/geoserver/wfs?service=WFS&version=1.1.0&request=${request_type}&typeName=${layers}`;
       console.log(Requrl);
       
       // Make the HTTP request to get the XML
@@ -180,17 +181,17 @@ export class WfsformComponent implements OnInit {
         const parser = new DOMParser();
         const xml = parser.parseFromString(data, "text/xml");
         const xmlString = new XMLSerializer().serializeToString(xml);
-        
+        this.parsedXml = xmlString; 
         // Display the parsed XML
-        console.log(xmlString); // You can use this XML data as needed in your application
+        // console.log(xmlString); // You can use this XML data as needed in your application
       });
-    } else {
-      Requrl = `${serverUrl}?service=WFS&version=${version}&request=${request_type}&layers=${layers}&bbox=${bbox}&width=${width}&height=${height}&srs=EPSG%3A4326&format=kml`;
-      console.log(Requrl);
+    // } else {
+    //   Requrl = `${serverUrl}?service=WFS&version=${version}&request=${request_type}&layers=${layers}&bbox=${bbox}&width=${width}&height=${height}&srs=EPSG%3A4326&format=kml`;
+    //   console.log(Requrl);
       
-      // Send the request string
-      this.sendString(Requrl);
-    }
+    //   // Send the request string
+    //   this.sendString(Requrl);
+    // }
   }
     
 }

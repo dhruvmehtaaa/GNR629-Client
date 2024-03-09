@@ -187,3 +187,7 @@
   <!-- <img [src]="sanitizer.bypassSecurityTrustUrl(interoperabilityService.getImage())" alt="WFS Map Image" *ngIf="interoperabilityService.getImage()"> -->
 
 </form>
+<div *ngIf="parsedXml" class="xml-box">
+  <pre>{{ parsedXml }}</pre>
+</div>
+
