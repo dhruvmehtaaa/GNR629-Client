@@ -210,7 +210,7 @@ export class WmsformComponent implements OnInit {
   
   //console.log(bbox);
     // Construct the URL with form values
-    const Requrl = `${serverUrl}?service=WMS&version=${version}&request=${request_type}&layers=${layers}&bbox=${bbox}&width=${width}&height=${height}&srs=EPSG%3A4326&format=image/png`;
+    const Requrl = `${serverUrl}?service=WMS&version=${version}&request=${request_type}&layers=${layers}&bbox=${bbox}&width=${width}&height=${height}&srs=EPSG%3A4326&format=${format}`;
     console.log(Requrl);
     this.sendString(Requrl); 
            
