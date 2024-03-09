@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from "@angular/core";
+import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { InteroperabilityService } from "../../interoperability.service";
 import { NgxXml2jsonService } from "ngx-xml2json";
@@ -69,6 +69,7 @@ export class WfsformComponent implements OnInit {
     private interoperabilityService: InteroperabilityService,
     private ngxXml2jsonService: NgxXml2jsonService,
     private sanitizer: DomSanitizer,
+    private cdr: ChangeDetectorRef 
     // private spinner: NgxSpinnerService
   ) {}
 
@@ -177,13 +178,14 @@ export class WfsformComponent implements OnInit {
       
       // Make the HTTP request to get the XML
       this.interoperabilityService.getData(Requrl).subscribe(data => {
-        // Parse the XML response
         const parser = new DOMParser();
         const xml = parser.parseFromString(data, "text/xml");
         const xmlString = new XMLSerializer().serializeToString(xml);
+        console.log(xmlString);
         this.parsedXml = xmlString; 
-        // Display the parsed XML
-        // console.log(xmlString); // You can use this XML data as needed in your application
+        // this.interoperabilityService.setXmlResponse(xmlString);
+        // this.cdr.detectChanges();
+        
       });
     // } else {
     //   Requrl = `${serverUrl}?service=WFS&version=${version}&request=${request_type}&layers=${layers}&bbox=${bbox}&width=${width}&height=${height}&srs=EPSG%3A4326&format=kml`;
