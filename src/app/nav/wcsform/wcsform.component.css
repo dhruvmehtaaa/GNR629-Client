@@ -1,0 +1,25 @@
+/* nav-component.css */
+
+.font-weight-normal {
+    font-weight: normal !important; /* Ensure normal font weight */
+  }
+  
+  .form-table {
+    width: 100%;
+    text-align: center;
+    color: #fff; /* Set text color to white */
+  }
+  
+  .input-box {
+    /* border: 1px solid #222; */
+  }
+  
+  .xml-box {
+    max-height: 150px; /* Set the maximum height */
+    overflow-y: auto; /* Enable vertical scrolling if content exceeds the box height */
+    border: 1px solid #555; /* Darken the border color */
+    padding: 10px; /* Add padding for spacing */
+    background-color: #444; /* Darken the background color */
+    color: #fff; /* Set text color to white */
+  }
+  
