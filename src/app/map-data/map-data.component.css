@@ -1,24 +1,27 @@
+/* map-data-component.css */
+
 .map-container {
   height: 100%;
   width: 100%;
   padding: 10px;
-  background-color: white;
+  background-color: #333; /* Darken the background color */
+  color: #fff; /* Set text color to white */
 }
 
 .map {
   height: 100%;
   width: 100%;
-  border: 1px solid #222;
+  border: 1px solid #555; /* Darken the border color */
 }
 
 .ol-popup {
   position: absolute;
-  background-color: white;
+  background-color: #444; /* Darken the background color */
   -webkit-filter: drop-shadow(0 1px 4px rgba(0, 0, 0, 0.2));
   filter: drop-shadow(0 1px 4px rgba(0, 0, 0, 0.2));
   padding: 8px;
   border-radius: 8px;
-  border: 1px solid #ccc;
+  border: 1px solid #777; /* Darken the border color */
   bottom: 12px;
   left: -50px;
   min-width: 100px;
@@ -29,6 +32,7 @@
   max-width: 100%;
   white-space: nowrap;
   overflow-x: auto;
+  color: #fff; /* Set text color to white */
 }
 
 .ol-popup:after,
@@ -43,14 +47,14 @@
 }
 
 .ol-popup:after {
-  border-top-color: white;
+  border-top-color: #444; /* Darken the background color */
   border-width: 6px;
   left: 50%;
   transform: translateX(-50%);
 }
 
 .ol-popup:before {
-  border-top-color: #ccc;
+  border-top-color: #777; /* Darken the border color */
   border-width: 7px;
   left: 50%;
   transform: translateX(-50%);

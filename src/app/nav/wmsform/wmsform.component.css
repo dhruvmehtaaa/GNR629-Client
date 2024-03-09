@@ -1,12 +1,17 @@
+/* nav-component.css */
+
 .font-weight-normal {
-  /* font-weight: normal !important; */
+  font-weight: normal !important; /* Ensure normal font weight */
 }
 
 .form-table {
   width: 100%;
   text-align: center;
+  color: #fff; /* Set text color to white */
 }
 
 .input-box {
-  /* border: 1px solid #222; */
+  border: 1px solid #555; /* Darken the border color */
+  background-color: #444; /* Darken the background color */
+  color: #fff; /* Set text color to white */
 }

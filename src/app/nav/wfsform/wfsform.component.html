@@ -61,16 +61,7 @@
   </div>
 
   <div class="wfsform" *ngIf="selectLayer && selectReq">
-    <div class="form-group">
-      <label class="control-label col-sm-2" for="style">Style:</label>
-      <div class="col-sm-10">
-        <select class="form-control" id="style" placeholder="Select style" formControlName="Styles">
-          <option *ngFor="let item of [styles]" [value]="item" selected>{{
-            item
-          }}</option>
-        </select>
-      </div>
-    </div>
+    
 
     <div class="form-group">
       <label class="control-label col-sm-2" for="srs">SRS:</label>
@@ -80,7 +71,7 @@
       </div>
     </div>
 
-    <div class="form-group">
+    <!-- <div class="form-group">
       <label class="control-label col-sm-2" for="bbox">Bounding Box:</label>
       <div class="col-sm-10">
         <table class="form-table">
@@ -118,8 +109,8 @@
           </tr>
         </table>
       </div>
-    </div>
-
+    </div> -->
+<!-- 
     <div class="form-group">
       <label class="control-label col-sm-2" for="bbox">Dimensions:</label>
       <div class="col-sm-10">
@@ -144,7 +135,7 @@
           </tr>
         </table>
       </div>
-    </div>
+    </div> -->
 
     <!-- <div class="form-group">
       <label class="control-label col-sm-2" for="format">Output Format:</label>
@@ -185,9 +176,9 @@
 
 
   <!-- <img [src]="sanitizer.bypassSecurityTrustUrl(interoperabilityService.getImage())" alt="WFS Map Image" *ngIf="interoperabilityService.getImage()"> -->
-
+  <div *ngIf="parsedXml" class="xml-box">
+    <pre>{{ parsedXml }}</pre>
+  </div>
 </form>
-<div *ngIf="parsedXml" class="xml-box">
-  <pre>{{ parsedXml }}</pre>
-</div>
+
 

@@ -1,7 +1,10 @@
+/* app.component.css */
+
 .layout {
-  background: #fff;
-  Height: 100%;
-  Padding: 10px
+  background: #333; /* Darken the background color */
+  color: #fff; /* Set text color to white */
+  height: 100%;
+  padding: 10px;
 }
 
 .full-height {
@@ -9,13 +12,13 @@
 }
 
 .half-height {
-  height: 50vh
+  height: 50vh;
 }
 
 .nav-layout {
-  background-color: #5f5c5c;
+  background-color: #222; /* Darken the background color */
+  color: #fff; /* Set text color to white */
   min-height: 100vh;
-
 }
 
 .min-height {
@@ -27,13 +30,24 @@
 }
 
 .header-layout {
-  background-color: white;
+  background-color: #444; /* Darken the background color */
   text-align: center;
   height: 10vh;
   font-size: x-large;
-  border-bottom: 2px solid #222;
+  border-bottom: 2px solid #fff; /* Lighten the border color */
 }
 
-.min-height {
-  /* min-height: 100vh; */
+/* Additional styles for dark mode */
+.dark-mode .layout {
+  background: #333;
+  color: #fff;
+}
+
+.dark-mode .nav-layout {
+  background-color: #222;
+}
+
+.dark-mode .header-layout {
+  background-color: #444;
+  border-bottom: 2px solid #fff;
 }
