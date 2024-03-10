@@ -81,8 +81,8 @@ export class MapDataComponent implements OnInit, AfterViewInit, OnDestroy {
     this.map = new Map({
       target: "map",
       view: new View({
-        center: [0, 0],
-        zoom: 2
+        center: [9483079.77, 2840780.71],
+        zoom: 4
       })
     });
 
