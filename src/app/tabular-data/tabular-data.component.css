@@ -1,17 +1,15 @@
-/* tabular-data-component.css */
-
 .xml-box {
-  border: 1px solid #555;
+  border: 1px solid #777; /* Darken the border color */
   padding: 10px;
   max-height: 200px;
   overflow-y: auto;
-  background-color: #444;
-  color: #fff;
+  background-color: #333; /* Darken the background color */
+  color: #fff; /* Set text color to white */
 }
 
 .xml-box h3 {
   font-size: 18px;
   margin-top: 0;
   margin-bottom: 10px;
-  color: #fff;
+  color: #fff; /* Set heading text color to white */
 }

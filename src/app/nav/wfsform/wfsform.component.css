@@ -1,5 +1,3 @@
-/* nav-component.css */
-
 .font-weight-normal {
   font-weight: normal !important; /* Ensure normal font weight */
 }
@@ -14,11 +12,25 @@
   /* border: 1px solid #222; */
 }
 
+.xml-container {
+  position: relative;
+}
+
+.xml-header {
+  position: sticky;
+  top: 0;
+  background-color: #222; /* Darken the background color */
+  color: #fff; /* Set text color to white */
+  padding: 10px; /* Add padding for spacing */
+  z-index: 1;
+}
+
 .xml-box {
-  max-height: 150px; /* Set the maximum height */
+  /* Adjust the height if needed */
+  max-height: 200px; /* Set the maximum height */
   overflow-y: auto; /* Enable vertical scrolling if content exceeds the box height */
   border: 1px solid #555; /* Darken the border color */
   padding: 10px; /* Add padding for spacing */
-  background-color: #444; /* Darken the background color */
+  background-color: #333; /* Darken the background color */
   color: #fff; /* Set text color to white */
 }

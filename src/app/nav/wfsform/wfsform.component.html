@@ -176,10 +176,37 @@
 
 
   <!-- <img [src]="sanitizer.bypassSecurityTrustUrl(interoperabilityService.getImage())" alt="WFS Map Image" *ngIf="interoperabilityService.getImage()"> -->
-  <div *ngIf="parsedXml" class="xml-box">
-    <p>DescribeFeatureType XML Feed</p>
-    <pre>{{ parsedXml }}</pre>
+  <!-- <div  class="xml-box">
+    <div class="xml-container">
+      <div class="xml-header">
+        <p>DescribeFeatureType XML Feed</p>
+      </div>
+      <div class="xml-box2">
+        <div><pre>{{ parsedXml }}</pre></div>
+      </div>
+    </div>
+    
+  </div> -->
+  <div *ngIf="parsedXml" class="xml-container">
+    <div class="xml-header">
+      <p>DescribeFeatureType XML Feed</p>
+    </div>
+    <div class="xml-box" id="xmlBox" onscroll="toggleXmlBox()">
+      <div><pre>{{ parsedXml }}</pre></div>
+    </div>
   </div>
+  
+  <script>
+    function toggleXmlBox() {
+      const xmlBox = document.getElementById('xmlBox');
+      if (xmlBox.scrollTop > 0) {
+        xmlBox.style.display = 'none';
+      } else {
+        xmlBox.style.display = 'block';
+      }
+    }
+  </script>
+  
 
   
 </form>
