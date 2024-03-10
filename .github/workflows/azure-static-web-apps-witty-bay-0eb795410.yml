@@ -6,34 +6,38 @@ on:
       - main
   pull_request:
     types: [opened, synchronize, reopened, closed]
-    branches:
-      - main
 
 jobs:
   build_and_deploy_job:
     if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
     runs-on: ubuntu-latest
-    name: Build and Deploy Job
     steps:
-      - uses: actions/checkout@v3
-        with:
-          submodules: true
-          lfs: false
-          
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
       - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '16.x'  # Use the desired version of Node.js here
+          node-version: '16.x'
 
-      - name: Install Dependencies and Build
-        run: npm install --force && npm run build  # Adding --force flag to npm install
+      - name: Install dependencies
+        run: npm install --legacy-peer-deps
 
-      - name: Deploy to Azure Static Web Apps
+      - name: Build
+        run: npm run build --if-present
+
+      - name: Run Azure/static-web-apps-deploy
         uses: Azure/static-web-apps-deploy@v1
         with:
-          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_WITTY_BAY_0EB795410 }}
+          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          action: "upload"
-          app_location: "/"
-          api_location: ""
-          output_location: "dist/InteroperabilityProj"
+          action: 'upload'
+          app_location: '/' # App location
+          api_location: 'api' # Api location - optional
+          output_location: 'build' # Built app content directory - optional
+          skip_app_build: false # Skip building app from root - optional
+          skip_api_build: true # Skip building api from root - optional
+          app_artifact_location: 'build' # Built app artifact location - optional
+          routes_location: 'routes.json' # Location of routes configuration file - optional
+          is_static_export: false # Whether to deploy a static export - optional
+          data_api_location: 'api' # Location of the data API - optional
