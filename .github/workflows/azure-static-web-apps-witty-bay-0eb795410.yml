@@ -38,6 +38,6 @@ jobs:
           skip_app_build: false # Skip building app from root - optional
           skip_api_build: true # Skip building api from root - optional
           app_artifact_location: 'build' # Built app artifact location - optional
-          routes_location: 'routes.json' # Location of routes configuration file - optional
+          routes_location: 'routes.json' # Location of routes configuration file - optiona
           is_static_export: false # Whether to deploy a static export - optional
           data_api_location: 'api' # Location of the data API - optional
