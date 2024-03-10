@@ -177,22 +177,36 @@ export class WfsformComponent implements OnInit {
       console.log(Requrl);
       
       // Make the HTTP request to get the XML
-      this.interoperabilityService.getData(Requrl).subscribe(data => {
-        const parser = new DOMParser();
-        const xml = parser.parseFromString(data, "text/xml");
-        const xmlString = new XMLSerializer().serializeToString(xml);
-        console.log(xmlString);
-        this.parsedXml = xmlString; 
-        // this.interoperabilityService.setXmlResponse(xmlString);
-        // this.cdr.detectChanges();
-        
-      });
+      if(request_type === 'DescribeFeatureType'){
+        this.interoperabilityService.getData(Requrl).subscribe(data => {
+          const parser = new DOMParser();
+          const xml = parser.parseFromString(data, "text/xml");
+          const xmlString = new XMLSerializer().serializeToString(xml);
+          console.log(xmlString);
+          this.parsedXml = xmlString; 
+          this.interoperabilityService.setXmlResponse(xmlString);
+          // this.cdr.detectChanges();
+          
+        });
+      }else{
+        this.interoperabilityService.getData(Requrl).subscribe(data => {
+          const parser = new DOMParser();
+          const xml = parser.parseFromString(data, "text/xml");
+          const xmlString = new XMLSerializer().serializeToString(xml);
+          console.log(xmlString);
+          // this.parsedXml = xmlString; 
+          this.interoperabilityService.setXmlResponse(xmlString);
+          this.cdr.detectChanges();
+          
+        });
+      }
+      
     // } else {
     //   Requrl = `${serverUrl}?service=WFS&version=${version}&request=${request_type}&layers=${layers}&bbox=${bbox}&width=${width}&height=${height}&srs=EPSG%3A4326&format=kml`;
     //   console.log(Requrl);
       
     //   // Send the request string
-    //   this.sendString(Requrl);
+      // this.sendString(Requrl);
     // }
   }
     
