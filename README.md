@@ -1,6 +1,6 @@
-# Angular Geospatial Data Web Client
+# Geospatial Data Web Client
 
-This Angular project provides a web client to access and retrieve geospatial data from WMS/WFS/WCS servers. It allows users to send various requests to a server (e.g., GetCapabilities, GetMap) and display the response, including both the XML response document and parsed values. Additionally, it supports displaying multiple layers on top of each other and includes a base layer such as Open Street Maps.
+This project was done as part of the course GNR629 at IIT Bombay and provides a web client to access and retrieve geospatial data from WMS/WFS/WCS servers. It allows users to send various requests to a server (e.g., GetCapabilities, GetMap) and display the response, including both the XML response document and parsed values. Additionally, it supports displaying multiple layers on top of each other and includes a base layer such as Open Street Maps.
 
 ## Functionality
 
